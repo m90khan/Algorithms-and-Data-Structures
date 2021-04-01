@@ -22,9 +22,9 @@ const obj1 = {
     otherObj: {
       superInner: 2,
       notANumber: true,
-      alsoNotANumber: 'yup'
-    }
-  }
+      alsoNotANumber: 'yup',
+    },
+  },
 };
 
 const obj2 = {
@@ -32,8 +32,21 @@ const obj2 = {
   b: { b: 2, bb: { b: 3, bb: { b: 2 } } },
   c: { c: { c: 2 }, cc: 'ball', ccc: 5 },
   d: 1,
-  e: { e: { e: 2 }, ee: 'car' }
+  e: { e: { e: 2 }, ee: 'car' },
 };
 
 console.log(nestedEvenSum(obj1)); // 6
 console.log(nestedEvenSum(obj2)); // 10
+
+// nestedEvenSum Solution
+
+function nestedEvenSum(obj, sum = 0) {
+  for (var key in obj) {
+    if (typeof obj[key] === 'object') {
+      sum += nestedEvenSum(obj[key]);
+    } else if (typeof obj[key] === 'number' && obj[key] % 2 === 0) {
+      sum += obj[key];
+    }
+  }
+  return sum;
+}

@@ -11,7 +11,7 @@ function someRecursive(arr, cb) {
   return true;
 }
 
-console.log(someRecursive([1, 2, 3, 4], val => val % 2 !== 0)); // true
-console.log(someRecursive([4, 6, 8, 9], val => val % 2 !== 0)); // true
-console.log(someRecursive([4, 6, 8], val => val % 2 !== 0)); // false
-console.log(someRecursive([4, 6, 8], val => val > 10)); // false
+console.log(someRecursive([1, 2, 3, 4], (val) => val % 2 !== 0)); // true
+console.log(someRecursive([4, 6, 8, 9], (val) => val % 2 !== 0)); // true
+console.log(someRecursive([4, 6, 8], (val) => val % 2 !== 0)); // false
+console.log(someRecursive([4, 6, 8], (val) => val > 10)); // false
