@@ -14,6 +14,7 @@ Return the count
 // Time Complexity - O(n * m)
 
 function stringSearch(long, short) {
+  if (short === '') return;
   let count = 0;
 
   for (let i = 0; i <= long.length - short.length; i++) {

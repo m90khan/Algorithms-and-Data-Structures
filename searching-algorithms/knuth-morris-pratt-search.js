@@ -1,9 +1,20 @@
 /*
-The problem with naive algorithm is that as soon a mismatch happens, instead of comparing pattern after then mismatched value
-it instead comparing after one step i+1 from the text position. Hence KMP
+The problem with naive algorithm is that as soon a mismatch happens, instead of comparing pattern after the mismatched value
+it pattern breaks out of loop (meaning it starts again from index 0) and text moves one step i+1 and start comparing from that position.
+Hence KMP
 */
 
 // Knuth-Morris-Pratt algorithm
+/*
+The idea is to find values in a pattern in which suffix is equal to prefix (meaning if the beginning part of pattern is again appearing
+in the pattern or not), matched pattern table  also called as lps or Pie table
+Pattern: a b c d a b c
+prefix: a , ab , abc , abcd
+suffix: c , bc , abc , dabc
+
+so abc matched which is reason that it avoid the mistake in naive search.
+
+*/
 // Write a function which accepts a string and a pattern, and returns the index
 // at which the value exists. If the pattern does not exist in the string, return -1.
 
