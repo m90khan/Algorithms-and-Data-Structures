@@ -2,36 +2,25 @@
 
 // Implement the following on the SinglyLinkedList class:
 
-// push
-// This function should take in a value and add a node to the end of the SinglyLinkedList.
-// It should return the SinglyLinkedList.
+/*
+What is a linked list?
+A data structure that contains a head, tail and length property.
+Linked Lists consist of nodes, and each node has a value and a pointer to another node or null
 
-// pop
-// This function should remove a node at the end of the SinglyLinkedList.
-// It should return the node removed.
+- PUSH
+- POP
+- SHIFT
+- UNSHIFT
+- GET
+- SET
+- INSERT
+- REMOVE
+- REVERSE
+- ROTATE
+- ITERATE
 
-// shift
-// This function should remove a node from the beginning of the SinglyLinkedList.
-// It should return the node removed.
 
-// unshift
-// This function should add a new node to the beginning of the SinglyLinkedList.
-// It should return the SinglyLinkedList.
-
-// get
-// This function should find a node at a specified index in a SinglyLinkedList.
-// It should return the found node.
-
-// set
-// This function should accept an index and a value and update the value
-// of the node in the SinglyLinkedList at the index with the new value.
-// It should return true if the node is updated successfully,
-// or false if an invalid index is passed in.
-
-// insert
-// This should insert a node at a specified index in a SinglyLinkedList.
-// It should return true if the index is valid, and false if the index is
-// invalid (less than 0 or greater than the length of the list).
+*/
 
 // remove
 // This function should remove a node at a specified index in a SinglyLinkedList.
@@ -67,100 +56,169 @@ class SinglyLinkedList {
     this.length = 0;
   }
 
+  /*
+- PUSH
+This function should take in a value and add a node to the end of the SinglyLinkedList.
+It should return the SinglyLinkedList.
+
+Pushing pseudocode
+This function should accept a value
+Create a new node using the value passed to the function
+If there is no head property on the list, set the head and tail to be the newly created node
+Otherwise set the next property on the tail to be the new node and set the tail property on the list to be the newly created node
+Increment the length by one
+Return the linked list
+  */
   push(data) {
     const node = new SinglyLinkedListNode(data);
-
-    if (!this.head) this.head = node;
-    else this.tail.next = node;
-
-    this.tail = node;
+    // if empty
+    if (!this.head) {
+      this.head = node;
+      this.tail = this.head;
+    }
+    // else add to the tail
+    else {
+      this.tail.next = node;
+      // points tail to current node
+      this.tail = node;
+    }
     this.length++;
-
     return this;
   }
+  /*
+- POP
+This function should remove a node at the end of the SinglyLinkedList.
+It should return the node removed.
 
+Popping pseudocode
+If there are no nodes in the list, return undefined
+Loop through the list until you reach the tail
+Set the next property of the 2nd to last node to be null
+Set the tail to be the 2nd to last node
+Decrement the length of the list by 1
+Return the value of the node removed
+*/
   pop() {
     if (!this.head) return undefined;
-
-    let removedNode;
-
+    let currentNode;
+    let newTail;
+    // if head is same as tail . only one item
     if (this.head === this.tail) {
-      removedNode = this.head;
       this.head = null;
       this.tail = null;
     } else {
-      let currentNode = this.head;
+      currentNode = this.head;
 
-      while (currentNode.next !== this.tail) {
+      while (currentNode.next) {
+        newTail = currentNode;
         currentNode = currentNode.next;
       }
-
-      removedNode = currentNode.next;
-      currentNode.next = null;
-      this.tail = currentNode;
+      this.tail = newTail;
+      this.tail.next = null;
     }
-
     this.length--;
-
-    return removedNode;
+    return currentNode;
   }
+  /*
+- SHIFT
+This function should remove a node from the beginning of the SinglyLinkedList.
+It should return the node removed.
 
+Shifting pseudocode
+If there are no nodes, return undefined
+Store the current head property in a variable
+Set the head property to be the current head's next property
+Decrement the length by 1
+Return the value of the node removed
+*/
   shift() {
     if (!this.head) return undefined;
-
     const removedNode = this.head;
-
     if (this.head === this.tail) this.tail = null;
-
     this.head = removedNode.next;
     this.length--;
-
     return removedNode;
   }
+  /*
+- Unshift
+This function should add a new node to the beginning of the SinglyLinkedList.
+It should return the SinglyLinkedList.
 
+Unshifting pseudocode
+This function should accept a value
+Create a new node using the value passed to the function
+If there is no head property on the list, set the head and tail to be the newly created node
+Otherwise set the newly created node's next property to be the current head property on the list
+Set the head property on the list to be that newly created node
+Increment the length of the list by 1
+Return the linked list
+*/
   unshift(data) {
     this.head = new SinglyLinkedListNode(data, this.head);
-
     if (!this.length) this.tail = this.head;
     this.length++;
-
     return this;
   }
+  /*
+- Get
+This function should find a node at a specified index in a SinglyLinkedList.
+It should return the found node.
 
+Get pseudocode
+This function should accept an index
+If the index is less than zero or greater than or equal to the length of the list, return null
+Loop through the list until you reach the index and return the node at that specific index
+*/
   get(index) {
     if (index < 0 || index >= this.length) return null;
-
     let currentNode = this.head;
-
     for (let i = 1; i <= index; i++) {
       currentNode = currentNode.next;
     }
-
     return currentNode;
   }
+  /*
+-Set
+ This function should accept an index and a value and update the value
+ of the node in the SinglyLinkedList at the index with the new value.  It should return true 
+ if the node is updated successfully, or false if an invalid index is passed in.
 
+ Set pseudocode
+This function should accept a value and an index
+Use your get function to find the specific node.
+If the node is not found, return false
+If the node is found, set the value of that node to be the value passed to the function and return true
+*/
   set(index, data) {
     const node = this.get(index);
-
     if (!node) return false;
-
     node.data = data;
-
     return true;
   }
+  /*
+- Insert
+This should insert a node at a specified index in a SinglyLinkedList.  It should return true 
+if the index is valid, and false if the index is invalid (less than 0 or greater than the length of the list).
 
+Insert pseudocode
+If the index is less than zero or greater than the length, return false
+If the index is the same as the length, push a new node to the end of the list
+If the index is 0, unshift a new node to the start of the list
+Otherwise, using the get method, access the node at the index - 1
+Set the next property on that node to be the new node
+Set the next property on the new node to be the previous next
+Increment the length
+Return true
+*/
   insert(index, data) {
     if (index < 0 || index > this.length) return false;
     if (index === 0) return !!this.unshift(data);
     if (index === this.length) return !!this.push(data);
 
     const prevNode = this.get(index - 1);
-
     if (!prevNode) return false;
-
     prevNode.next = new SinglyLinkedListNode(data, prevNode.next);
     this.length++;
-
     return true;
   }
 
