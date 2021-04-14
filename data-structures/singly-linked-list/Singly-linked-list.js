@@ -22,31 +22,6 @@ Linked Lists consist of nodes, and each node has a value and a pointer to anothe
 
 */
 
-// remove
-// This function should remove a node at a specified index in a SinglyLinkedList.
-// It should return the removed node, if the index is valid,
-// or undefined if the index is invalid.
-
-// reverse
-// This function should reverse the SinglyLinkedList in place.
-
-// rotate
-// This function should rotate all the nodes in the list by some number passed in.
-// For instance, if your list looks like 1 -> 2 -> 3 -> 4 -> 5 and you rotate by 2,
-// the list should be modified to 3 -> 4 -> 5 -> 1 -> 2.
-// The number passed in to rotate can be any integer (should work with negative indexes).
-// Time Complexity: O(N), where N is the length of the list.
-// Space Complexity: O(1)
-
-// Additionally, the following methods are implemented on the class:
-// find - accepts a parameter compareTo which can be a value for comparison or
-// a comparison function (must return true or false for each node), returns
-// the found node or its index.
-
-// iterate - accepts a callback function as a parameter, iterates through each node
-// in the list applying the callback function, returns array of values returned from
-// the callback function
-
 const SinglyLinkedListNode = require('./Singly-linked-list-node');
 
 class SinglyLinkedList {
@@ -199,6 +174,7 @@ If the node is found, set the value of that node to be the value passed to the f
 - Insert
 This should insert a node at a specified index in a SinglyLinkedList.  It should return true 
 if the index is valid, and false if the index is invalid (less than 0 or greater than the length of the list).
+!! =  gives the truthy value instead of whole list
 
 Insert pseudocode
 If the index is less than zero or greater than the length, return false
@@ -221,23 +197,39 @@ Return true
     this.length++;
     return true;
   }
+  /*
+-Remove
+ This function should remove a node at a specified index in a SinglyLinkedList.
+ It should return the removed node, if the index is valid, or undefined if the index is invalid.
 
+Remove pseudocode
+If the index is less than zero or greater than the length, return undefined
+If the index is the same as the length-1, pop
+If the index is 0, shift
+Otherwise, using the get method, access the node at the index - 1
+Set the next property on that node to be the next of the next node
+Decrement the length
+Return the value of the node removed
+*/
   remove(index) {
     if (index < 0 || index >= this.length) return undefined;
     if (index === 0) return this.shift();
     if (index === this.length - 1) return this.pop();
 
     const prevNode = this.get(index - 1);
-
     if (!prevNode) return undefined;
-
     const removedNode = prevNode.next;
     prevNode.next = removedNode.next;
     this.length--;
-
     return removedNode;
   }
+  /*
 
+-Find - accepts a parameter compareTo which can be a value for comparison or
+a comparison function (must return true or false for each node), returns
+the found node or its index.
+
+*/
   find(compareTo, returnIndex = false) {
     if (!this.head) return undefined;
 
@@ -257,25 +249,44 @@ Return true
 
     return undefined;
   }
+  /*
+-Reverse
+This function should reverse the SinglyLinkedList in place.
 
+Reverse pseudocode
+Swap the head and tail
+Create a variable called next
+Create a variable called prev
+Create a variable called node and initialize it to the head property
+Loop through the list
+Set next to be the next property on whatever node is
+Set the next property on the node to be whatever prev is
+Set prev to be the value of the node variable
+Set the node variable to be the value of the next variable
+Once you have finished looping, return the list
+*/
   reverse() {
     let currentNode = this.head;
-    let nextNode = currentNode.next;
+    this.head = this.tail;
     this.tail = currentNode;
-    currentNode.next = null;
-
-    while (nextNode) {
-      const tempNode = nextNode.next;
-      nextNode.next = currentNode;
-      currentNode = nextNode;
-      nextNode = tempNode;
+    let prev = null;
+    let next;
+    for (let i = 0; i < this.length; i++) {
+      next = node.next;
+      node.next = prev;
+      prev = node;
+      node = next;
     }
-
-    this.head = currentNode;
-
     return this;
   }
-
+  /*
+- Rotate
+This function should rotate all the nodes in the list by some number passed in.
+For instance, if your list looks like 1 -> 2 -> 3 -> 4 -> 5 and you rotate by 2,
+the list should be modified to 3 -> 4 -> 5 -> 1 -> 2.
+The number passed in to rotate can be any integer (should work with negative indexes).
+Time Complexity: O(N), where N is the length of the list. Space Complexity: O(1)
+*/
   rotate(number) {
     const index = number < 0 ? number + this.length : number;
 
@@ -293,7 +304,10 @@ Return true
 
     return this;
   }
-
+  /*
+- Iterate - accepts a callback function as a parameter, iterates through each node
+in the list applying the callback function, returns array of values returned from the callback function
+*/
   iterate(cb = null) {
     const arr = [];
     let currentNode = this.head;
