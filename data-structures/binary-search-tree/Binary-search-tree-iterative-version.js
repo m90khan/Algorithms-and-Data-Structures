@@ -2,14 +2,6 @@
 
 // Write a function on the BinarySearchTree class
 
-// insert
-// This function should accept a value and insert it into the BST in the correct
-// position. It should return the binary search tree.
-
-// find
-// This function should find a node in a binary tree. It should return the node
-// if found, otherwise return `null`.
-
 // remove
 // This function should remove a node from a binary search tree.
 // Your remove function should be able to handle removal of the root node,
@@ -104,17 +96,34 @@ class BinarySearchTree {
 
     return true;
   }
+  /*
+- Insert
+This function should accept a value and insert it into the BST in the correct
+position. It should return the binary search tree.
 
+INSERTING A NODE
+Steps - Iteratively or Recursively
+Create a new node
+Starting at the root
+Check if there is a root, if not - the root now becomes that new node!
+If there is a root, check if the value of the new node is greater than or less than the value of the root
+If it is greater 
+Check to see if there is a node to the right
+If there is, move to that node and repeat these steps
+If there is not, add that node as the right property
+If it is less
+Check to see if there is a node to the left
+If there is, move to that node and repeat these steps
+If there is not, add that node as the left property
+*/
   insert(data, node = this.root) {
     const newNode = new BinarySearchTreeNode(data);
-
     if (!node) {
       this.root = newNode;
       return this;
     }
 
     let currentNode = node;
-
     while (true) {
       if (newNode.data === currentNode.data) return this;
 
@@ -133,18 +142,41 @@ class BinarySearchTree {
       }
     }
   }
+  /*
+- Find
+This function should find a node in a binary tree. It should return the node
+if found, otherwise return `null`.
 
+Finding a Node in a BST
+Steps - Iteratively or Recursively
+
+Starting at the root
+Check if there is a root, if not - we're done searching!
+If there is a root, check if the value of the new node is the value we are looking for. If we found it, we're done!
+If not, check to see if the value is greater than or less than the value of the root
+If it is greater 
+Check to see if there is a node to the right
+If there is, move to that node and repeat these steps
+If there is not, we're done searching!
+If it is less
+Check to see if there is a node to the left
+If there is, move to that node and repeat these steps
+If there is not, we're done searching!
+*/
   find(data, node = this.root) {
+    if (!node) return false;
     let currentNode = node;
-
     while (currentNode) {
       if (data === currentNode.data) return currentNode;
 
-      if (data < currentNode.data) currentNode = currentNode.left;
-      else currentNode = currentNode.right;
+      if (data < currentNode.data) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
     }
 
-    return null;
+    return currentNode;
   }
 
   contains(data, node = this.root) {
@@ -244,8 +276,7 @@ class BinarySearchTree {
 
     if (!currentNode) return null;
 
-    const removedNode = Object.assign({}, currentNode,
-      { left: null, right: null });
+    const removedNode = Object.assign({}, currentNode, { left: null, right: null });
 
     // Node has no children.
     if (!currentNode.left && !currentNode.right) {
@@ -263,7 +294,9 @@ class BinarySearchTree {
     } else if (currentNode.left && currentNode.right) {
       // Find the next biggest node (minimum node in the right branch)
       // to replace current node with.
-      const { nextBigNode, nextBigNodeParent } = this.findNextBigNodeWithParent(currentNode);
+      const { nextBigNode, nextBigNodeParent } = this.findNextBigNodeWithParent(
+        currentNode
+      );
       currentNode.data = nextBigNode.data;
 
       // Node is direct parent of the next biggest node
@@ -378,7 +411,17 @@ console.log(binarySearchTree1.getHeight()); // 3
 console.log(binarySearchTree1.isBalanced()); // true
 
 const binarySearchTree2 = new BinarySearchTree();
-binarySearchTree2.insert(22).insert(49).insert(85).insert(66).insert(95).insert(90).insert(100).insert(88).insert(93).insert(89);
+binarySearchTree2
+  .insert(22)
+  .insert(49)
+  .insert(85)
+  .insert(66)
+  .insert(95)
+  .insert(90)
+  .insert(100)
+  .insert(88)
+  .insert(93)
+  .insert(89);
 binarySearchTree2.remove(85);
 console.log(binarySearchTree2.root.data); // 22
 console.log(binarySearchTree2.root.right.right.data); // 88
