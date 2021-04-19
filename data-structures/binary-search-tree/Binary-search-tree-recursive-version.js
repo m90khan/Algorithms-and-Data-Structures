@@ -67,9 +67,11 @@ class BinarySearchTree {
   isBalanced(node = this.root) {
     if (!node) return true;
 
-    return Math.abs(this.getHeight(node.left) - this.getHeight(node.right)) <= 1 &&
+    return (
+      Math.abs(this.getHeight(node.left) - this.getHeight(node.right)) <= 1 &&
       this.isBalanced(node.left) &&
-      this.isBalanced(node.right);
+      this.isBalanced(node.right)
+    );
   }
 
   // More efficient way to know whether the BST is balanced
@@ -154,7 +156,10 @@ class BinarySearchTree {
     return { parentNode, currentNode };
   }
 
-  findNextBigNodeWithParent(nextBigNodeParent = this.root, nextBigNode = nextBigNodeParent.right) {
+  findNextBigNodeWithParent(
+    nextBigNodeParent = this.root,
+    nextBigNode = nextBigNodeParent.right
+  ) {
     if (!nextBigNode || !nextBigNode.left) return { nextBigNodeParent, nextBigNode };
 
     return this.findNextBigNodeWithParent(nextBigNode, nextBigNode.left);
@@ -165,8 +170,7 @@ class BinarySearchTree {
 
     if (!currentNode) return null;
 
-    const removedNode = Object.assign({}, currentNode,
-      { left: null, right: null });
+    const removedNode = Object.assign({}, currentNode, { left: null, right: null });
 
     // Node has no children.
     if (!currentNode.left && !currentNode.right) {
@@ -184,7 +188,9 @@ class BinarySearchTree {
     } else if (currentNode.left && currentNode.right) {
       // Find the next biggest node (minimum node in the right branch)
       // to replace current node with.
-      const { nextBigNode, nextBigNodeParent } = this.findNextBigNodeWithParent(currentNode);
+      const { nextBigNode, nextBigNodeParent } = this.findNextBigNodeWithParent(
+        currentNode
+      );
       currentNode.data = nextBigNode.data;
 
       // Node is direct parent of the next biggest node
@@ -217,10 +223,20 @@ class BinarySearchTree {
 
     return [].concat(...data);
   }
-
-  depthFirstSearchPreOrder(nodeToTraverse = this.root) {
+  /*
+DFS - PreOrder
+Create a variable to store the values of nodes visited
+Store the root of the BST in a variable called current
+Write a helper function which accepts a node
+Push the value of the node to the variable that stores the values
+If the node has a left property, call the helper function with the left property on the node
+If the node has a right property, call the helper function with the right property on the node
+Invoke the helper function with the current variable
+Return the array of values
+*/
+  depthFirstSearchPreOrder() {
     const data = [];
-
+    const current = this.root;
     function traverse(node) {
       data.push(node.data);
 
@@ -228,11 +244,23 @@ class BinarySearchTree {
       if (node.right) traverse(node.right);
     }
 
-    traverse(nodeToTraverse);
+    traverse(current);
 
     return data;
   }
+  /*
+Steps - Recursively
 
+DFS - PostOrder
+Create a variable to store the values of nodes visited
+Store the root of the BST in a variable called current
+Write a helper function which accepts a node
+If the node has a left property, call the helper function with the left property on the node
+If the node has a right property, call the helper function with the right property on the node
+Push the value of the node to the variable that stores the values
+Invoke the helper function with the current variable
+Return the array of values
+*/
   depthFirstSearchPostOrder(nodeToTraverse = this.root) {
     const data = [];
 
@@ -247,7 +275,17 @@ class BinarySearchTree {
 
     return data;
   }
-
+  /*
+DFS - InOrder
+Create a variable to store the values of nodes visited
+Store the root of the BST in a variable called current
+Write a helper function which accepts a node
+If the node has a left property, call the helper function with the left property on the node
+Push the value of the node to the variable that stores the values
+If the node has a right property, call the helper function with the right property on the node
+Invoke the helper function with the current variable
+Return the array of values
+*/
   depthFirstSearchInOrder(nodeToTraverse = this.root) {
     const data = [];
 
@@ -280,7 +318,17 @@ console.log(binarySearchTree1.getHeight()); // 3
 console.log(binarySearchTree1.isBalanced()); // true
 
 const binarySearchTree2 = new BinarySearchTree();
-binarySearchTree2.insert(22).insert(49).insert(85).insert(66).insert(95).insert(90).insert(100).insert(88).insert(93).insert(89);
+binarySearchTree2
+  .insert(22)
+  .insert(49)
+  .insert(85)
+  .insert(66)
+  .insert(95)
+  .insert(90)
+  .insert(100)
+  .insert(88)
+  .insert(93)
+  .insert(89);
 binarySearchTree2.remove(85);
 console.log(binarySearchTree2.root.data); // 22
 console.log(binarySearchTree2.root.right.right.data); // 88
