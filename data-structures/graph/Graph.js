@@ -2,23 +2,6 @@
 
 // Implement the following methods on the Graph class
 
-// addVertex
-// This function should add a node to the graph and place a new key in
-// the adjacency list with the value of an empty array.
-
-// addEdge
-// This function should add an edge between two nodes in the graph and place
-// each value of the nodes in each array for the value of the node in the adjacency list.
-
-// removeEdge
-// This function should accept two nodes and remove the edge between them.
-// It should modify the adjacency list to ensure that both values are not
-// in each array for the two nodes which no longer contain the edge.
-
-// removeVertex
-// This function should remove the node in the array of nodes and also remove
-// all edges that the removed node previously contained.
-
 // depthFirstSearch
 // This function should return an array of nodes visited using DFS.
 // Do this iteratively (using a stack) and recursively.
@@ -56,19 +39,62 @@ class Graph {
 
     this.adjacencyList = {};
   }
+  /*
+-AddVertex
+This function should add a node to the graph and place a new key in
+the adjacency list with the value of an empty array.
 
+Write a method called addVertex, which accepts a name of a vertex
+It should add a key to the adjacency list with the name of the vertex and set its value to be an empty array
+*/
   addVertex(vertex) {
     if (!this.adjacencyList[vertex]) this.adjacencyList[vertex] = [];
   }
+  /*
+- ADDING AN EDGE   - UNDIRECTED GRAPH ignoring error edge cases
+This function should add an edge between two nodes in the graph and place
+each value of the nodes in each array for the value of the node in the adjacency list.
 
-  addEdge(vertexOne, vertexTwo, weight) {
-    throw new Error('You must implement your own addEdge method for undirected or directed graph.');
+Pseudocode
+This function should accept two vertices, we can call them vertex1 and vertex2
+The function should find in the adjacency list the key of vertex1 and push vertex2 to the array
+The function should find in the adjacency list the key of vertex2 and push vertex1 to the array
+Don't worry about handling errors/invalid vertices
+*/
+  addEdge(vertexOne, vertexTwo) {
+    this.adjacencyList[vertexOne].push(vertexTwo);
+    this.adjacencyList[vertexTwo].push(vertexOne);
   }
+  /*
+- REMOVING AN EDGE - Undirected GRAPH ignoring error edge cases
+ This function should accept two nodes and remove the edge between them.
+ It should modify the adjacency list to ensure that both values are not
+ in each array for the two nodes which no longer contain the edge.
 
+Pseudocode
+This function should accept two vertices, we'll call them vertex1 and vertex2
+The function should reassign the key of vertex1 to be an array that does not contain vertex2
+The function should reassign the key of vertex2 to be an array that does not contain vertex1
+Don't worry about handling errors/invalid vertices
+*/
   removeEdge(vertexOne, vertexTwo) {
-    throw new Error('You must implement your own removeEdge method for undirected or directed graph.');
+    this.adjacencyList[vertexOne] = this.adjacencyList[vertexOne].filter((v1) => {
+      v1 !== vertexTwo;
+    });
+    this.adjacencyList[vertexTwo] = this.adjacencyList[vertexTwo].filter((v2) => {
+      v2 !== vertexOne;
+    });
   }
+  /*
+-RemoveVertex
+ This function should remove the node in the array of nodes and also remove
+ all edges that the removed node previously contained.
 
+The function should accept a vertex to remove
+The function should loop as long as there are any other vertices in the adjacency list for that vertex
+Inside of the loop, call our removeEdge function with the vertex we are removing and any values in the adjacency list for that vertex
+delete the key in the adjacency list for that vertex
+*/
   removeVertex(vertex) {
     if (this.adjacencyList[vertex]) {
       while (this.adjacencyList[vertex].length) {
@@ -171,7 +197,8 @@ class Graph {
           prev[linkedVertex.value] = vertex;
           queue.enqueue(linkedVertex.value);
 
-          if (linkedVertex.value === end) return { prev, distance: dist[linkedVertex.value] };
+          if (linkedVertex.value === end)
+            return { prev, distance: dist[linkedVertex.value] };
         }
       }
     }
@@ -235,14 +262,15 @@ class Graph {
       return obj;
     }, {});
 
-    const matrix = Array.from({ length: vertices.length },
-      (row, i) => Array.from({ length: vertices.length },
-        (elem, j) => i === j ? 0 : Infinity));
+    const matrix = Array.from({ length: vertices.length }, (row, i) =>
+      Array.from({ length: vertices.length }, (elem, j) => (i === j ? 0 : Infinity))
+    );
 
     for (let i = 0; i < vertices.length; i++) {
       for (let j = 0; j < this.adjacencyList[vertices[i]].length; j++) {
-        matrix[i][verticesObj[this.adjacencyList[vertices[i]][j].value]] =
-          this.adjacencyList[vertices[i]][j].weight;
+        matrix[i][
+          verticesObj[this.adjacencyList[vertices[i]][j].value]
+        ] = this.adjacencyList[vertices[i]][j].weight;
       }
     }
 
@@ -264,13 +292,17 @@ class Graph {
       currentPath.push(vertex);
       currentVisited[vertex] = true;
 
-      const unvisitedLinkedVertices = self.adjacencyList[vertex].filter((linkedVertex) => {
-        return !visited[linkedVertex.value];
-      });
+      const unvisitedLinkedVertices = self.adjacencyList[vertex].filter(
+        (linkedVertex) => {
+          return !visited[linkedVertex.value];
+        }
+      );
 
-      if (!unvisitedLinkedVertices.length &&
+      if (
+        !unvisitedLinkedVertices.length &&
         currentPath.length === numberOfVertices &&
-        self.adjacencyList[vertex].some((linkedVertex) => linkedVertex.value === start)) {
+        self.adjacencyList[vertex].some((linkedVertex) => linkedVertex.value === start)
+      ) {
         currentPath.push(start);
         paths.push(currentPath);
       } else {
@@ -314,15 +346,15 @@ class Graph {
     const startState = 1 << startIndex;
     const VISITED_ALL_VERTICES = (1 << numberOfVertices) - 1;
 
-    const memo = Array.from({ length: numberOfVertices },
-      () => Array.from({ length: 1 << numberOfVertices },
-        () => null));
+    const memo = Array.from({ length: numberOfVertices }, () =>
+      Array.from({ length: 1 << numberOfVertices }, () => null)
+    );
 
-    const prev = Array.from({ length: numberOfVertices },
-      () => Array.from({ length: 1 << numberOfVertices },
-        () => null));
+    const prev = Array.from({ length: numberOfVertices }, () =>
+      Array.from({ length: 1 << numberOfVertices }, () => null)
+    );
 
-    function findPath (state, position) {
+    function findPath(state, position) {
       if (state === VISITED_ALL_VERTICES) return matrix[position][startIndex];
 
       if (memo[position][state]) return memo[position][state];
@@ -332,7 +364,8 @@ class Graph {
 
       for (let indexOfVertex = 0; indexOfVertex < numberOfVertices; indexOfVertex++) {
         if ((state & (1 << indexOfVertex)) === 0) {
-          const currentDistance = matrix[position][indexOfVertex] +
+          const currentDistance =
+            matrix[position][indexOfVertex] +
             findPath(state | (1 << indexOfVertex), indexOfVertex);
 
           if (currentDistance < bestDistance) {
