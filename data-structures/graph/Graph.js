@@ -2,10 +2,6 @@
 
 // Implement the following methods on the Graph class
 
-// depthFirstSearch
-// This function should return an array of nodes visited using DFS.
-// Do this iteratively (using a stack) and recursively.
-
 // breadthFirstSearch
 // This function should return an array of vertices visited using BFS.
 
@@ -104,19 +100,36 @@ delete the key in the adjacency list for that vertex
       delete this.adjacencyList[vertex];
     }
   }
+  /*
+- DEPTH FIRST TRAVERSAL   - RECURSIVE
+  
+This function should return an array of nodes visited using DFS.
+Do this iteratively (using a stack) and recursively.
 
+Pseudocode
+The function should accept a starting node
+Create a list to store the end result, to be returned at the very end
+Create an object to store visited vertices
+Create a helper function which accepts a vertex
+The helper function should return early if the vertex is empty
+The helper function should place the vertex it accepts into the visited object and push that vertex into the result array.
+Loop over all of the values in the adjacencyList for that vertex
+If any of those values have not been visited, recursively invoke the helper function with that vertex
+Invoke the helper function with the starting vertex
+Return the result array
+*/
   depthFirstSearchRecursive(start = Object.keys(this.adjacencyList)[0]) {
-    const self = this;
     const result = [];
     const visited = {};
+    const adjacencyList = this.adjacencyList;
 
     function traverse(vertex) {
-      if (!self.adjacencyList[vertex]) return;
+      if (!adjacencyList[vertex]) return;
 
       result.push(vertex);
       visited[vertex] = true;
 
-      for (const linkedVertex of self.adjacencyList[vertex]) {
+      for (const linkedVertex of adjacencyList[vertex]) {
         if (!visited[linkedVertex.value]) traverse(linkedVertex.value);
       }
     }
@@ -125,7 +138,21 @@ delete the key in the adjacency list for that vertex
 
     return result;
   }
-
+  /*
+DEPTH FIRST TRAVERSAL - Iterative
+The function should accept a starting node
+Create a stack to help use keep track of vertices (use a list/array)
+Create a list to store the end result, to be returned at the very end
+Create an object to store visited vertices
+Add the starting vertex to the stack, and mark it visited
+While the stack has something in it:
+Pop the next vertex from the stack
+If that vertex hasn't been visited yet:
+​Mark it as visited
+Add it to the result list
+Push all of its neighbors into the stack
+Return the result array
+*/
   depthFirstSearchIterative(start = Object.keys(this.adjacencyList)[0]) {
     if (!this.adjacencyList[start]) return [];
 
@@ -134,10 +161,10 @@ delete the key in the adjacency list for that vertex
     const visited = {};
     stack.push(start);
     visited[start] = true;
-
+    let currentVertex;
     while (stack.size) {
-      const vertex = stack.pop();
-      result.push(vertex);
+      currentVertex = stack.pop();
+      result.push(currentVertex);
 
       for (const linkedVertex of this.adjacencyList[vertex]) {
         if (!visited[linkedVertex.value]) {
@@ -149,7 +176,43 @@ delete the key in the adjacency list for that vertex
 
     return result;
   }
+  /*
+BREADTH FIRST
+This function should accept a starting vertex
+Create a queue (you can use an array) and place the starting vertex in it
+Create an array to store the nodes visited
+Create an object to store nodes visited
+Mark the starting vertex as visited
+Loop as long as there is anything in the queue
+Remove the first vertex from the queue and push it into the array that stores nodes visited
+Loop over each vertex in the adjacency list for the vertex you are visiting.
+If it is not inside the object that stores nodes visited, mark it as visited and enqueue that vertex
+Once you have finished looping, return the array of visited nodes
+*/
+  breadthFirstSearchIterative(start = Object.keys(this.adjacencyList)[0]) {
+    if (!this.adjacencyList[start]) return [];
 
+    const queue = [start];
+    const result = [];
+    const visited = {};
+    let currentVertex;
+    visited[start] = true;
+
+    while (queue.length) {
+      currentVertex = queue.shift();
+      result.push(currentVertex);
+
+      for (const linkedVertex of this.adjacencyList[vertex]) {
+        if (!visited[linkedVertex.value]) {
+          visited[linkedVertex.value] = true;
+          queue.push(linkedVertex.value);
+        }
+      }
+    }
+
+    return result;
+  }
+  // Solution 2: using Queue
   breadthFirstSearchIterative(start = Object.keys(this.adjacencyList)[0]) {
     if (!this.adjacencyList[start]) return [];
 

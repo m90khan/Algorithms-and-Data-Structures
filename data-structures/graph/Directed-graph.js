@@ -2,14 +2,9 @@
 
 // Implement the following methods on the DirectedGraph class
 
-// addEdge
-// This function should add an edge between two nodes in the graph and place
-// each value of the nodes in each array for the value of the node in the adjacency list.
+//
 
-// removeEdge
-// This function should accept two nodes and remove the edge between them.
-// It should modify the adjacency list to ensure that both values are not
-// in each array for the two nodes which no longer contain the edge.
+//
 
 // hasCycle
 // This function should return true if the graph contains a cycle or false if not.
@@ -29,6 +24,11 @@ const Graph = require('./Graph');
 const Queue = require('../queue/Queue');
 
 class DirectedGraph extends Graph {
+  /*
+  - addEdge
+This function should add an edge between two nodes in the graph and place
+each value of the nodes in each array for the value of the node in the adjacency list.
+  */
   addEdge(vertexOne, vertexTwo, weight = 0) {
     if (!this.adjacencyList[vertexOne]) this.adjacencyList[vertexOne] = [];
     if (!this.adjacencyList[vertexTwo]) this.adjacencyList[vertexTwo] = [];
@@ -37,7 +37,12 @@ class DirectedGraph extends Graph {
       this.adjacencyList[vertexOne].push({ value: vertexTwo, weight });
     }
   }
-
+  /*
+- removeEdge
+ This function should accept two nodes and remove the edge between them.
+It should modify the adjacency list to ensure that both values are not
+in each array for the two nodes which no longer contain the edge.
+*/
   removeEdge(vertexOne, vertexTwo) {
     if (this.adjacencyList[vertexOne]) {
       for (let i = 0; i < this.adjacencyList[vertexOne].length; i++) {
